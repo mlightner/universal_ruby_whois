@@ -1,0 +1,42 @@
+Universal Whois Server
+============================
+Author: Matt Lightner <mlightner@gmail.com>
+
+This library attempts to interpret WHOIS output from a variety of different registrars.
+The ultimate goal is to have a complete "dictionary" of all of the TLD registrars (including
+double domain TLDs such as .co.uk) on the Internet.
+
+This package requires a command line whois utility to retrieve output.  It will then attempt
+to interpret that output based on a series of regular expressions.
+
+== DEFINING WHOIS SERVERS ==
+
+Whois servers can be defined on a per-extension basis, so each registrar can have a unique set
+of regular expressions to match its particular output format.  Whois servers are defined in the
+file server_list.rb.
+
+If you're using this module and come across a TLD that isn't yet supported or isn't working
+quite right, I highly encourage you to fork the project and commit your updates.  The more
+people we have working on the list, the more comprehensive and effective it becomes!
+
+== EXAMPLE USAGE ==
+
+Here is the output from a sample IRB session using this module:
+
+irb> require 'universal_ruby_whois'
+=> true
+irb> domain = Whois::Server.find("mattlightner.com")
+=> #<Whois::Domain:0xb7a3b014 @domain="mattlightner.com", @server_tld_key="com">
+irb> domain.status
+=> :registered
+irb> domain.available?
+=> false
+irb> domain.registered?
+=> true
+irb> domain.created_date
+=> Mon Aug 28 00:00:00 EDT 2006
+irb> domain = Whois::Server.find("9384jf398ejf9832ej.com")            
+=> #<Whois::Domain:0xb7a1ab34 @domain="9384jf398ejf9832ej.com", @server_tld_key="com">
+irb> domain.status      
+=> :free
+
