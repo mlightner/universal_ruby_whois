@@ -5,15 +5,26 @@ module Whois
 
   class Domain
 
-    attr_accessor :domain, :server_tld_key, :whois_output
+    # The domain name, lower case, no spaces.
+    attr_reader :domain
 
-    # Lookup a domain name.  This method returns a domain name object on which various
-    # methods can be called.
+    # The TLD server being used for this domain.
+    attr_reader :server_tld_key
+
+    # The cached output from a whois request for this domain.
+    attr_reader :whois_output
+
+    # Look up a domain name.  If a proper whois server can not be found for this domain name's extension,
+    # it will return nil.  Otherwise it returns a Whois::Domain object.
+    #
+    # Note: the preferred way to call this method is through the wrapper:
+    #
+    #   Whois.find(domain)
     def self.find(domain)
       ::Whois::Server.find(domain)
     end
 
-    def initialize(domain, server_tld_key = nil)
+    def initialize(domain, server_tld_key = nil) #:nodoc:
       @domain, @server_tld_key = domain.to_s.strip.downcase, server_tld_key
     end
 
@@ -27,6 +38,7 @@ module Whois
       server.regexes rescue {}
     end
 
+    # Does this object have a domain name set?
     def has_domain?
       return false if domain.nil?
       (domain.to_s =~ /\w/) ? true : false
@@ -76,6 +88,7 @@ module Whois
     end
     alias_method :creation_date, :created_date
 
+    # Do we know the creation date for this domain?
     def creation_date_known?
       created_date.kind_of?(Time)
     end

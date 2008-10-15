@@ -1,18 +1,21 @@
-Universal Whois Server
-============================
-Author: Matt Lightner <mlightner@gmail.com>
+= Universal Whois Server
+
+*Author*: Matt Lightner <mailto:mlightner@gmail.com>
+
+*License*: MIT[link:files/LICENSE.html]
 
 This library attempts to interpret WHOIS output from a variety of different registrars.
 The ultimate goal is to have a complete "dictionary" of all of the TLD registrars (including
-double domain TLDs such as .co.uk) on the Internet.
+double domain TLDs such as .co.uk) on the Internet, and corresponding regular expressions
+to parse the unique output format for each one.
 
 This package requires a command line whois utility to retrieve output.  It will then attempt
 to interpret that output based on a series of regular expressions.
 
 
-== DEFINING WHOIS SERVERS ==
+=== DEFINING WHOIS SERVERS
 
-Whois servers can be defined on a per-extension basis, so each registrar can have a unique set
+Whois servers can be defined on a per-TLD basis, so each registrar can have a unique set
 of regular expressions to match its particular output format.  Whois servers are defined in the
 file server_list.rb.
 
@@ -20,42 +23,54 @@ If you're using this module and come across a TLD that isn't yet supported or is
 quite right, I highly encourage you to fork the project and commit your updates.  The more
 people we have working on the list, the more comprehensive and effective it becomes!
 
-== EXAMPLE USAGE ==
 
-Here is the output from a sample IRB session using this module:
+=== TLD SEARCH PRIORITY
 
-> require 'universal_ruby_whois'
-=> true
-
-> domain = Whois.find("mattlightner.com")
-=> #<Whois::Domain:0xb7a3b014 @domain="mattlightner.com", @server_tld_key="com">
-
-> domain.status
-=> :registered
-
-> domain.available?
-=> false
-
-> domain.registered?
-=> true
-
-> domain.created_date
-=> Mon Aug 28 00:00:00 EDT 2006
-
-> domain = Whois.find("9384jf398ejf9832ej.com")            
-=> #<Whois::Domain:0xb7a1ab34 @domain="9384jf398ejf9832ej.com", @server_tld_key="com">
-
-> domain.status      
-=> :free
+When deciding which whois server to use, the script will always choose the most specific
+server entry it can find.  For instance, if you have defined a server for .uk domains,
+but also a server for .co.uk domains, the domain name "test.co.uk" will always use the
+latter whois server.
 
 
-== NOTES ==
+=== EXAMPLE USAGE
+
+Here is the output from a sample IRB session using this library:
+
+  require 'universal_ruby_whois'
+  => true
+  domain = Whois.find("mattlightner.com")
+  => #<Whois::Domain:0xb7a3b014 @domain="mattlightner.com", @server_tld_key="com">
+  domain.status
+  => :registered
+  domain.available?
+  => false
+  domain.registered?
+  => true
+  domain.created_date
+  => Mon Aug 28 00:00:00 EDT 2006
+  domain = Whois.find("9384jf398ejf9832ej.com")            
+  => #<Whois::Domain:0xb7a1ab34 @domain="9384jf398ejf9832ej.com", @server_tld_key="com">
+  domain.status      
+  => :free
+
+
+=== NOTES
 
 Some registrars are relatively unreliable or may add a server to a blacklist after a certain number of
 queries.  In particular, the registrars for these domains:
 
- - es and related TLDs.  They only provide an HTTP whois access interface, which is unreliable at best
-   (although this module supports HTTP lookups quite well).
+- es and related TLDs:  They only provide an HTTP whois access interface, which is unreliable at
+  best (although this module supports HTTP lookups quite well).
+- asn.au com.au id.au net.au org.au: 'whois.aunic.net', seems as though they will blacklist a server
+  making too many queries.  Not sure about their blacklist removal policy.
 
- - asn.au com.au id.au net.au org.au, 'whois.aunic.net', seems as though they will blacklist a server
-   making too many queries.  Not sure about their blacklist removal policy.
+
+=== TODO
+
+- Add better support for creation date parsing for major registrars.
+- Find a more reliable way to look up domains from registrars not providing a whois server.
+
+
+=== CONTRIBUTIONS
+
+Contribution is encouraged!  Grab the source from: git://github.com/mlightner/universal_ruby_whois.git

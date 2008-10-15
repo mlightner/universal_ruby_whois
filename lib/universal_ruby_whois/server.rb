@@ -6,11 +6,21 @@ module Whois
   # that are used to match against the raw whois output and determine various information about the domain name (currently
   # registration status is supported on most domain TLDs, and creation date on a good number).
   class Server
-    @@whois_bin = `which whois`.gsub(/\s/, '')
 
-    attr_accessor :tld, :nic_server, :regexes, :port
+    # The default regular expressions used when defining a new server if none are supplied.
+    DEFAULT_WHOIS_REGULAR_EXPRESSIONS = {
+        :free => /(avail|free|no match|no entr|not taken|not registered|not found)/im,
+        :registered => /(registered|Domain ID|domain name\s*\:|is active|is not available|exists|\bregistrant\b|Created on)/im,
+        :created_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.]*\s*([\w\-\:\ ]+)[^\n\r]*[\n\r]/im,
+        :error => /(error)/im
+      }
 
-    # ==Whois Server Definition
+    # The location of the 'whois' binary utility.
+    WHOIS_BIN = `which whois`.gsub(/\s/, '')
+
+    attr_reader :tld, :nic_server, :regexes, :port
+
+    # === Whois Server Definition
     #
     # Define a whois server for one or more TLDs.  TLDs can be given as a single string or an array of strings representing
     # TLDs that are handled by this server.  The second argument should be a whois server hostname.  If none is given,
@@ -20,14 +30,14 @@ module Whois
     # and :error.
     #
     # ==== Regex Options
-    # <tt>:registered</tt> If this regular expression matches the whois output, this domain is considered registered.
-    # <tt>:free</tt> If this regular expression matches the whois output, the domain is considered available.
-    # <tt>:error</tt> If this regular expression matches, an error is said to have occurred.
-    # <tt>:created_date</tt> If this regular expression matches, the value of the second set of parentheses is parsed
-    #                        using ParseDate and used as the creation date for this domain.
+    # * <tt>:registered</tt> -- If this regular expression matches the whois output, this domain is considered registered.
+    # * <tt>:free</tt> -- If this regular expression matches the whois output, the domain is considered available.
+    # * <tt>:error</tt> -- If this regular expression matches, an error is said to have occurred.
+    # * <tt>:created_date</tt> -- If this regular expression matches, the value of the second set of parentheses is parsed
+    #   using ParseDate and used as the creation date for this domain.
     #
     # Note, the preferred location for Whois::Server definitions is the server_list.rb file.  Definitions should go from
-    #    least specific to most specific, as subsequent definitions for a TLD will override previous ones.
+    # least specific to most specific, as subsequent definitions for a TLD will override previous ones.
     def self.define(tlds, server = nil, regexes = nil, &block)
       tlds = tlds.kind_of?(Array) ? tlds : [tlds]
       tlds.each do |tld|
@@ -36,17 +46,13 @@ module Whois
       tlds
     end
 
-    def initialize(tld, nic_server = nil, options = nil)
+    def initialize(tld, nic_server = nil, options = nil) #:nodoc:
       @tld = tld.gsub(/^\.+/, '')
       options ||= Hash.new
       @response_cache = Hash.new("")
       @nic_server = nic_server
       @port = options.delete(:port)
       @regexes = options.reverse_merge(
-        :free => /(avail|free|no match|no entr|not taken|not registered|not found)/im,
-        :registered => /(registered|Domain ID|domain name\s*\:|is active|is not available|exists|\bregistrant\b|Created on)/im,
-        :created_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.]*\s*([\w\-\:\ ]+)[^\n\r]*[\n\r]/im,
-        :error => /(error)/im
         )
       @regexes.each do |key, rx|
         next unless rx.kind_of?(Array)
@@ -58,6 +64,7 @@ module Whois
       end
     end
 
+    # A hash of all of the known whois servers indexed by TLD
     def self.list
       @@list ||= Hash.new
     end
@@ -66,14 +73,15 @@ module Whois
       @@list = value
     end
 
-    def self.domain_object_cache
+    def self.domain_object_cache #:nodoc:
       @@domain_object_cache ||= Hash.new
     end
 
-    def self.domain_object_cache=(value)
+    def self.domain_object_cache=(value) #:nodoc:
       @@domain_object_cache = value
     end
 
+    # A list of strings representing all supported TLDs.
     def self.defined_tlds
       self.list.collect {|tld,server| tld.gsub(/^\./, '') }
     end
@@ -107,6 +115,10 @@ module Whois
 
     # Look up a domain name.  If a proper whois server can not be found for this domain name's extension,
     # it will return nil.  Otherwise it returns a Whois::Domain object.
+    #
+    # Note: the preferred way to call this method is through the wrapper:
+    #
+    #   Whois.find(domain)
     def self.find(domain)
       domain = domain.to_s.strip.downcase
       return domain_object_cache[domain] unless domain_object_cache[domain].blank?
@@ -176,14 +188,14 @@ module Whois
       define_single(tld.to_s, server, :port => port)
     end
 
-    def self.define_single(*args, &block)
+    def self.define_single(*args, &block) #:nodoc:
       new_server = allocate
       new_server.send(:initialize, *args, &block)
       list[args.first.to_s] = new_server
       new_server
     end
 
-    def self.run_command_with_timeout(command, timeout = 10, do_raise = false)
+    def self.run_command_with_timeout(command, timeout = 10, do_raise = false) #:nodoc:
       @output = ""
       begin
         status = Timeout::timeout(10) do
@@ -200,11 +212,11 @@ module Whois
       @output
     end
 
-    def self.shell_escape(word)
+    def self.shell_escape(word) #:nodoc:
       word.to_s.gsub(/[^\w\-\_\.]+/, '') rescue ''
     end
 
-  end # class Server
+  end
 
 end
 

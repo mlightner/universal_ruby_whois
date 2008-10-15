@@ -8,10 +8,9 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
-
 Rake::RDocTask.new do |rd|
-  #rd.main = "README.rdoc"
-  rd.rdoc_files.include("lib/*.rb", "lib/**/*.rb")
+  rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
+  rd.main = "README"
 end
 
 task :default => [:test]

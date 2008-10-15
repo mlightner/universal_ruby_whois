@@ -1,4 +1,4 @@
-class String
+class String #:nodoc:
   def interpolate(*args)
     if args.length > 1
       replacements = Hash[*args]
