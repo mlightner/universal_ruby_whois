@@ -9,8 +9,8 @@ Rake::TestTask.new do |t|
 end
 
 Rake::RDocTask.new do |rd|
-  rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
-  rd.main = "README"
+  rd.rdoc_files.include("README.rdoc", "LICENSE", "lib/**/*.rb")
+  rd.main = "README.rdoc"
 end
 
 task :default => [:test]
