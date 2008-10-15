@@ -68,8 +68,6 @@ Whois::Server.define('ch',"whois.nic.ch")
 Whois::Server.define('cn',"whois.cnnic.net.cn")
 Whois::Server.define('cz',"whois.nic.cz")
 Whois::Server.define('ee',"whois.eenet.ee")
-Whois::Server.define('es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
-Whois::Server.define('com.es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
 Whois::Server.define('gr',"https://grweb.ics.forth.gr/")
 Whois::Server.define('it',"whois.nic.it")
 Whois::Server.define('li',"whois.nic.li")
@@ -89,6 +87,18 @@ Whois::Server.define('vg',"whois.adamsnames.tc")
 Whois::Server.define('ws',"whois.worldsite.ws")
 
 
+#Whois::Server.define('es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
+#Whois::Server.define('com.es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
+
+Whois::Server.define(
+  %w(es com.es nom.es org.es gob.es edu.es),
+  ['https://www.nic.es/esnic/servlet/BuscarDomSolAlta', :post, { :Submit => 'Buscar', :domino => '%DOMAIN_NO_TLD%',
+    :sufijo => '%TLD%', :tipo => 'dominio'}],
+  :registered => [%q{%DOMAIN% </a> </th> <td class="disp"> <img src="../images/icon_disp_no.gif" alt="no" />}, 'im'],
+  :free => [%q{%DOMAIN% </a> </th> <td class="disp"> <img src="../images/icon_disp_yes.gif" alt="si" />}, 'im']
+)
+
+
 # By leaving out the whois server, we force it to follow the internic redirection.
 Whois::Server.define(
   [ 'com', 'net', 'edu' ], nil,
@@ -104,7 +114,8 @@ Whois::Server.define(
 
 Whois::Server.define(%w(asn.au com.au id.au net.au org.au), 'whois.aunic.net',
   :free => /No Data Found/im,
-  :registered => /No Data Found/im.invert! )
+  :registered => /No Data Found/im.invert!,
+  :error => /BLACKLISTED/m )
 
 Whois::Server.define(
  %w(hk com.hk net.hk edu.hk org.hk gov.hk idv.hk),

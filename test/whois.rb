@@ -3,21 +3,48 @@ require File.dirname(__FILE__) + '/../lib/universal_ruby_whois'
 
 class WhoisTest < Test::Unit::TestCase
 
+  TEST_TLDS = %w(com org co.uk eu.com ru info)
+  REGISTERED_DOMAIN = "google"
+  AVAILABLE_DOMAIN = "asdfasdfasdfcvr3rwsdc2e"
+
+  def test_invalid_tld
+    domain = Whois.find("hello.blahblah")
+    assert_nil domain
+  end
+
   def test_unavailable
-    domain = Whois::Server.find("google.com")
-    assert !domain.available?
-    assert domain.registered?
+    TEST_TLDS.each do |tld|
+      domain = find_and_assert_domain("#{REGISTERED_DOMAIN}.#{tld}")
+      assert !domain.available?, "The domain name #{domain} shows as available but should not."
+      assert domain.registered?, "The domain name #{domain} does not show as registered but should."
+    end
   end
 
   def test_available
-    domain = Whois::Server.find("j983jf89ej2e09d2jd.com")
-    assert domain.available?
-    assert !domain.registered?
+    TEST_TLDS.each do |tld|
+      domain = find_and_assert_domain("#{AVAILABLE_DOMAIN}.#{tld}")
+      assert domain.available?, "The domain name #{domain} does not show as available but should."
+      assert !domain.registered?, "The domain name #{domain} shows as registered but should not."
+    end
   end
 
   def test_creation_date
-    domain = Whois::Server.find("google.com")
-    domain.created_date == Time.local(*ParseDate.parsedate("1997-09-15"))
+    domain = find_and_assert_domain("google.com")
+    assert_equal Time.local(*ParseDate.parsedate("1997-09-15")), domain.created_date
+
+    TEST_TLDS.each do |tld|
+      domain = find_and_assert_domain("#{REGISTERED_DOMAIN}.#{tld}")
+      next unless domain.creation_date_known?
+      assert_kind_of Time, domain.created_date, "Can't find creation date for domain: #{domain}"
+    end
+  end
+
+  protected
+
+  def find_and_assert_domain(domain)
+    domain_object = ::Whois.find(domain)
+    assert_kind_of Whois::Domain, domain_object, "Unable to look up info for domain name: #{domain}"
+    domain_object
   end
 
 end
