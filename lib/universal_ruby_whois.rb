@@ -8,7 +8,7 @@ require 'timeout'
 require File.dirname(__FILE__) + '/universal_ruby_whois/string'
 require File.dirname(__FILE__) + '/universal_ruby_whois/extended_regexp'
 Regexp.class_eval do
-  include Whois::Regexp
+  include Whois::ExtendedRegexp
 end
 
 require File.dirname(__FILE__) + '/universal_ruby_whois/domain'
