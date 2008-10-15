@@ -1,9 +1,9 @@
 module Whois
 
-  module Regexp #:nodoc:
+  module ExtendedRegexp #:nodoc:
 
     def self.included(base) #:nodoc:
-      base.send(:include, Whois::Regexp::InstanceMethods)
+      base.send(:include, Whois::ExtendedRegexp::InstanceMethods)
     end
 
     # Extensions for Ruby's core Regexp class.

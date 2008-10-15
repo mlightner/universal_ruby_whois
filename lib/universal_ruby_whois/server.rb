@@ -52,8 +52,7 @@ module Whois
       @response_cache = Hash.new("")
       @nic_server = nic_server
       @port = options.delete(:port)
-      @regexes = options.reverse_merge(
-        )
+      @regexes = options.reverse_merge(DEFAULT_WHOIS_REGULAR_EXPRESSIONS)
       @regexes.each do |key, rx|
         next unless rx.kind_of?(Array)
         rx2 = Regexp.new(Regexp.escape(rx.first).gsub(/\s+/, '\s*'))
@@ -171,7 +170,7 @@ module Whois
         url = nic_server.gsub(/\%DOMAIN\%/, domain)
         @response_cache[domain] = Net::HTTP.get_response(URI.parse(url)).body
       else
-        command = "#{@@whois_bin} #{('-h ' + @nic_server) unless @nic_server.blank?} #{self.class.shell_escape(domain)} 2>&1"
+        command = "#{WHOIS_BIN} #{('-h ' + @nic_server) unless @nic_server.blank?} #{self.class.shell_escape(domain)} 2>&1"
         @response_cache[domain] = Whois::Server.run_command_with_timeout(command, 10, true)
       end
       @response_cache[domain]
@@ -180,7 +179,7 @@ module Whois
     # Used as a fallback in case no specific WHOIS server is defined for a given TLD.  An attempt will be made to search
     # the IANA global registrar database to find a suitable whois server.
     def self.define_from_iana(tld)
-      iana_out = run_command_with_timeout("#{@@whois_bin} -h whois.iana.org #{shell_escape(tld.to_s)} 2>&1", 10, false)
+      iana_out = run_command_with_timeout("#{WHOIS_BIN} -h whois.iana.org #{shell_escape(tld.to_s)} 2>&1", 10, false)
       return false if iana_out.blank?
       return false unless iana_out =~ /Whois\s+Server\s+\(port ([\d]+)\)\: ([\w\-\.\_]+)/im
       port = $1
