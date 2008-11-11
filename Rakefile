@@ -39,8 +39,18 @@ task :pdoc => [:rdoc] do
   Rake::RubyForgePublisher.new(RUBY_FORGE_PROJECT, RUBY_FORGE_USER).upload
 end
 
-desc 'Publish the gem and API docs'
+desc 'Publish the gem and API docs to RubyForge'
 task :publish => [:pdoc, :rubyforge_upload]
+
+desc 'Publish the current version to GitHub.'
+task :github do
+  require 'readline'
+  message = Readline::readline('Describe changes: ')
+  raise "Couldn't add current changes." unless system("git add .")
+  raise "Couldn't commit changes with message." unless system("git", "commit", "-m", message)
+  raise "Couldn't push changes to GitHub." unless system("git push origin master")
+  puts "Changes published to GitHub."
+end
 
 desc "Publish the release files to RubyForge."
 task :rubyforge_upload => :package do
