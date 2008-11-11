@@ -46,8 +46,10 @@ Here is the output from a sample IRB session using this library:
   => false
   domain.registered?
   => true
-  domain.created_date
+  domain.creation_date
   => Mon Aug 28 00:00:00 EDT 2006
+  domain.expiration_date
+  => Fri Aug 28 00:00:00 EDT 2009
   domain = Whois.find("9384jf398ejf9832ej.com")            
   => #<Whois::Domain:0xb7a1ab34 @domain="9384jf398ejf9832ej.com", @server_tld_key="com">
   domain.status      

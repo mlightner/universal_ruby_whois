@@ -22,7 +22,7 @@ module Whois
       }
 
     # The location of the 'whois' binary utility.
-    WHOIS_BIN = `which whois`.gsub(/\s/, '')
+    WHOIS_BIN = '/usr/bin/env whois'
 
     attr_reader :tld, :nic_server, :regexes, :port, :unavailable, :unavailable_response
 
