@@ -8,7 +8,8 @@ require 'rake/gempackagetask'
 require 'rake/testtask'
 require 'rake/contrib/rubyforgepublisher'
 
-load File.dirname(__FILE__) + '/universal_ruby_whois.gemspec'
+specfile = File.read(File.dirname(__FILE__) + '/universal_ruby_whois.gemspec')
+eval(specfile, binding)
 
 desc 'Default: run unit tests.'
 task :default => :test

@@ -2,3 +2,5 @@
 .svn
 html
 github_gem.rb
+pkg
+pkg/*

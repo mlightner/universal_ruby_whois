@@ -1,5 +1,5 @@
 PKG_NAME      = 'universal_ruby_whois'
-PKG_VERSION   = '1.2.0'
+PKG_VERSION   = '1.2.1'
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 RUBY_FORGE_PROJECT = 'universalwhois'
 RUBY_FORGE_USER    = 'mlightner'
@@ -30,7 +30,7 @@ GEM_SPEC = spec = Gem::Specification.new do |s|
   s.require_path = "lib"
   s.autorequire = "name"
   s.add_dependency('activesupport', '>= 1.4.4')
-  s.test_file = %w(
+  s.test_files = %w(
     test/whois.rb
     test/string.rb
     test/regexp.rb
