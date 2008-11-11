@@ -11,7 +11,8 @@ module Whois
     DEFAULT_WHOIS_REGULAR_EXPRESSIONS = {
         :free => /(avail|free|no match|no entr|not taken|not registered|not found)/im,
         :registered => /(registered|Domain ID|domain name\s*\:|is active|is not available|exists|\bregistrant\b|Created on)/im,
-        :created_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.]*\s*([\w\-\:\ ]+)[^\n\r]*[\n\r]/im,
+        :creation_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
+        :expiration_date => /(expiration date|expires on|registered through|Renewal date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
         :error => /(error)/im
       }
 
@@ -26,14 +27,14 @@ module Whois
     # TLDs that are handled by this server.  The second argument should be a whois server hostname.  If none is given,
     # the generic output from the command line whois program is used (with any available redirection).  An optional third
     # argument is an array of regular expressions used to parse output from this particular server.  A set of relatively
-    # liberal defaults is used if none (or only some) are given.  Supported regex keys are :free, :registered, :created_date
+    # liberal defaults is used if none (or only some) are given.  Supported regex keys are :free, :registered, :creation_date
     # and :error.
     #
     # ==== Regex Options
     # * <tt>:registered</tt> -- If this regular expression matches the whois output, this domain is considered registered.
     # * <tt>:free</tt> -- If this regular expression matches the whois output, the domain is considered available.
     # * <tt>:error</tt> -- If this regular expression matches, an error is said to have occurred.
-    # * <tt>:created_date</tt> -- If this regular expression matches, the value of the second set of parentheses is parsed
+    # * <tt>:creation_date</tt> -- If this regular expression matches, the value of the second set of parentheses is parsed
     #   using ParseDate and used as the creation date for this domain.
     #
     # Note, the preferred location for Whois::Server definitions is the server_list.rb file.  Definitions should go from

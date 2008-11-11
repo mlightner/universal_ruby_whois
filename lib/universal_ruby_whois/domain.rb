@@ -78,19 +78,37 @@ module Whois
     end
 
     # Returns a Time object representing the date this domain name was created.
-    def created_date
+    def creation_date
       return nil unless has_domain?
-      return @created_date unless @created_date.blank?
-      if regexes[:created_date] && (regexes[:created_date] =~ whois_output)
-        @created_date = (Time.local(*ParseDate.parsedate($2)) rescue nil)
+      return @creation_date unless @creation_date.blank?
+      if regexes[:creation_date] && (regexes[:creation_date] =~ whois_output)
+        @creation_date = (Time.local(*ParseDate.parsedate($2)) rescue nil)
       end
-      @created_date
+      @creation_date
     end
-    alias_method :creation_date, :created_date
+
+    # Depreciated.  Use creation_date instead.
+    alias_method :created_date, :creation_date
 
     # Do we know the creation date for this domain?
     def creation_date_known?
-      created_date.kind_of?(Time)
+      creation_date.kind_of?(Time)
+    end
+
+
+    # Returns a Time object representing the date this domain name is set to expire.
+    def expiration_date
+      return nil unless has_domain?
+      return @expiration_date unless @expiration_date.blank?
+      if regexes[:expiration_date] && (regexes[:expiration_date] =~ whois_output)
+        @expiration_date = (Time.local(*ParseDate.parsedate($2)) rescue nil)
+      end
+      @expiration_date
+    end
+
+    # Do we know the expiration date for this domain?
+    def expiration_date_known?
+      expiration_date.kind_of?(Time)
     end
 
     def to_s

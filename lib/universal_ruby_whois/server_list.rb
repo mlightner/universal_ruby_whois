@@ -86,9 +86,15 @@ Whois::Server.define('tc',"whois.adamsnames.tc")
 Whois::Server.define('vg',"whois.adamsnames.tc")
 Whois::Server.define('ws',"whois.worldsite.ws")
 
-
 #Whois::Server.define('es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
 #Whois::Server.define('com.es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
+
+Whois::Server.define(
+  %w(jp co.jp or.jp ne.jp ac.jp ad.jp ed.jp go.jp gr.jp lg.jp),
+  ['http://whois.jprs.jp/en/', :post, { :submit => 'query', :key => '%DOMAIN%', :type => 'DOM'}],
+  :registered => /Domain Information\:/im,
+  :free => /No match\!\!/im
+)
 
 Whois::Server.define(
   %w(es com.es nom.es org.es gob.es edu.es),
@@ -248,4 +254,10 @@ Whois::Server.define(
 Whois::Server.define('asia', 'whois.nic.asia',
   :registered => /Domain ID/im,
   :free => /NOT FOUND/im
+)
+Whois::Server.define(
+ '.co.il',
+ 'whois.isoc.org.il',
+ :registered => /validity:/im,
+ :free => /No data was found to match the request criteria./im
 )

@@ -1,0 +1,5 @@
+== 11/10/08
+  * Support for expiration date parsing added as requested by Jorge Yau.
+  * Renamed "created_date" to "creation_date" for consistency.
+  * Moved supporting libraries into a support folder.
+  * Added support for .jp and .co.jp etc. domain names.
