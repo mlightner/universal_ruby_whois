@@ -44,10 +44,21 @@ module Whois
       (domain.to_s =~ /\w/) ? true : false
     end
 
+    # Does this domain have a server which is available?
+    def has_available_server?
+      server && !(server.unavailable? rescue true)
+    end
+
+    # Does this domain have sufficient info to perform a lookup?
+    def has_domain_and_server?
+      has_domain? && has_available_server?
+    end
+    alias_method :valid?, :has_domain_and_server?
+
     # The raw whois server output obtained when looking up this domain.
     def whois_output
       return @whois_output if !@whois_output.blank?
-      @whois_output = has_domain? ? server.raw_response(domain) : ''
+      @whois_output = has_domain_and_server? ? server.raw_response!(domain) : ''
     end
 
     # The domain name's current registration status:
@@ -56,7 +67,7 @@ module Whois
     # <tt>:error</tt> There was an error looking up the domain name.
     # <tt>:unknown</tt> The domain name status could not be determined.
     def status
-      return :unknown unless has_domain?
+      return :unknown unless has_domain_and_server?
       return @status unless @status.blank?
       [ :registered, :free, :error ].each do |status|
         #return status if Regexp.new(regexes[status].source, 5).match(res)
@@ -67,19 +78,19 @@ module Whois
 
     # Is this domain available?  Returns true/false.
     def available?
-      return nil unless has_domain?
+      return nil unless has_domain_and_server?
       status == :free
     end
 
     # Is this domain name registered?  Returns true/false.
     def registered?
-      return nil unless has_domain?
+      return nil unless has_domain_and_server?
       status == :registered
     end
 
     # Returns a Time object representing the date this domain name was created.
     def creation_date
-      return nil unless has_domain?
+      return nil unless has_domain_and_server?
       return @creation_date unless @creation_date.blank?
       if regexes[:creation_date] && (regexes[:creation_date] =~ whois_output)
         @creation_date = (Time.local(*ParseDate.parsedate($2)) rescue nil)
@@ -98,7 +109,7 @@ module Whois
 
     # Returns a Time object representing the date this domain name is set to expire.
     def expiration_date
-      return nil unless has_domain?
+      return nil unless has_domain_and_server?
       return @expiration_date unless @expiration_date.blank?
       if regexes[:expiration_date] && (regexes[:expiration_date] =~ whois_output)
         @expiration_date = (Time.local(*ParseDate.parsedate($2)) rescue nil)

@@ -7,19 +7,24 @@ module Whois
   # registration status is supported on most domain TLDs, and creation date on a good number).
   class Server
 
+    # Exception class thrown when a WHOIS server is down or unavailable.
+    class Unavailable < StandardError
+    end
+
     # The default regular expressions used when defining a new server if none are supplied.
     DEFAULT_WHOIS_REGULAR_EXPRESSIONS = {
         :free => /(avail|free|no match|no entr|not taken|not registered|not found)/im,
         :registered => /(registered|Domain ID|domain name\s*\:|is active|is not available|exists|\bregistrant\b|Created on)/im,
         :creation_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
         :expiration_date => /(expiration date|expires on|registered through|Renewal date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
-        :error => /(error)/im
+        :error => /(error)/im,
+        :server_unavailable => /(Sorry\. Server busy\.|too many requests|been blocked)/im
       }
 
     # The location of the 'whois' binary utility.
     WHOIS_BIN = `which whois`.gsub(/\s/, '')
 
-    attr_reader :tld, :nic_server, :regexes, :port
+    attr_reader :tld, :nic_server, :regexes, :port, :unavailable, :unavailable_response
 
     # === Whois Server Definition
     #
@@ -139,8 +144,13 @@ module Whois
       server
     end
 
+    def unavailable?
+      @unavailable ? true : false
+    end
+
     # Retrieve the raw WHOIS server output for a domain.
     def raw_response(domain)
+      return nil if unavailable?
       return @response_cache[domain] if !@response_cache[domain].blank?
       @response_cache[domain] = ""
       if nic_server.kind_of?(Array)
@@ -174,7 +184,21 @@ module Whois
         command = "#{WHOIS_BIN} #{('-h ' + @nic_server) unless @nic_server.blank?} #{self.class.shell_escape(domain)} 2>&1"
         @response_cache[domain] = Whois::Server.run_command_with_timeout(command, 10, true)
       end
-      @response_cache[domain]
+      if match = regexes[:server_unavailable].match_with_inversion(@response_cache[domain])
+        @server_unavailable = true
+        @unavailable_response = match[1]
+        nil
+      else
+        @response_cache[domain]
+      end
+    end
+
+    def raw_response!(domain)
+      res = raw_response(domain)
+      if !res || !res.respond_to?(:to_s) || res.blank?
+        raise Whois::Server::Unavailable, "The WHOIS server for TLD #{tld.to_s} is currently unavailable. (response: #{unavailable_response})"
+      end
+      res
     end
 
     # Used as a fallback in case no specific WHOIS server is defined for a given TLD.  An attempt will be made to search

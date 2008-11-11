@@ -55,6 +55,7 @@ class WhoisTest < Test::Unit::TestCase
   def find_and_assert_domain(domain)
     domain_object = ::Whois.find(domain)
     assert_kind_of Whois::Domain, domain_object, "Unable to look up info for domain name: #{domain}"
+    assert domain_object.valid?, "The domain name object for #{domain} is not valid (perhaps the whois server is down or busy?)"
     domain_object
   end
 
