@@ -240,10 +240,16 @@ Whois::Server.define(
   
 )
 Whois::Server.define(
-  %w(travel jobs aero mobi pw tw),
+  %w(travel jobs aero pw tw),
   'whois.encirca.com',
   :registered => /Domain Registrar Status:/im,
   :free => /Not found:/im
+)
+Whois::Server.define(
+  'mobi',
+  'whois.corenic.net',
+  :registered => /Domain ID:/im,
+  :free => /NOT FOUND/m
 )
 Whois::Server.define(
   'ca',
