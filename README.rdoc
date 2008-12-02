@@ -4,6 +4,9 @@
 
 *License*: MIT[link:files/LICENSE.html]
 
+*RDoc*: http://universalwhois.rubyforge.org/
+
+
 This library attempts to interpret WHOIS output from a variety of different registrars.
 The ultimate goal is to have a complete "dictionary" of all of the TLD registrars (including
 double domain TLDs such as .co.uk) on the Internet, and corresponding regular expressions
