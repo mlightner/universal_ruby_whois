@@ -4,7 +4,11 @@
 
 *License*: MIT[link:files/LICENSE.html]
 
-*RDoc*: http://universalwhois.rubyforge.org/
+*RDoc*: http://universalwhois.rubyforge.org
+
+*RubyForge URL*: http://rubyforge.org/projects/universalwhois
+
+*GitHub URL*: http://github.com/mlightner/universal_ruby_whois/tree/master
 
 
 This library attempts to interpret WHOIS output from a variety of different registrars.

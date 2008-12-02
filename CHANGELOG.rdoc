@@ -1,3 +1,7 @@
+== 12/1/08
+  * Included atourino's fix for .mobi domains.
+  * Updated Rakefile to publish to RubyForge.
+
 == 11/10/08
   * Support for expiration date parsing added as requested by Jorge Yau.
   * Renamed "created_date" to "creation_date" for consistency.
