@@ -50,6 +50,11 @@ class WhoisTest < Test::Unit::TestCase
     end
   end
 
+  def test_mobi_domain
+    domain = find_and_assert_domain("mtld.mobi")
+    assert domain.expiration_date_known?
+  end
+
   protected
 
   def find_and_assert_domain(domain)

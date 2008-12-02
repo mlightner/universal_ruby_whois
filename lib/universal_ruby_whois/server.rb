@@ -15,8 +15,8 @@ module Whois
     DEFAULT_WHOIS_REGULAR_EXPRESSIONS = {
         :free => /(avail|free|no match|no entr|not taken|not registered|not found)/im,
         :registered => /(registered|Domain ID|domain name\s*\:|is active|is not available|exists|\bregistrant\b|Created on)/im,
-        :creation_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
-        :expiration_date => /(expiration date|expires on|registered through|Renewal date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
+        :creation_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+?\d[\w\-\:\ \/]*)[^\n\r]*[\n\r]/im,
+        :expiration_date => /(expiration date|expires on|registered through|Renewal date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+?\d[\w\-\:\ \/]*)[^\n\r]*[\n\r]/im,
         :error => /(error)/im,
         :server_unavailable => /(Sorry\. Server busy\.|too many requests|been blocked)/im
       }
@@ -24,7 +24,7 @@ module Whois
     # The location of the 'whois' binary utility.
     WHOIS_BIN = '/usr/bin/env whois'
 
-    attr_reader :tld, :nic_server, :regexes, :port, :unavailable, :unavailable_response
+    attr_reader :tld, :nic_server, :regexes, :port, :server_unavailable, :unavailable_response
 
     # === Whois Server Definition
     #
@@ -145,7 +145,7 @@ module Whois
     end
 
     def unavailable?
-      @unavailable ? true : false
+      @server_unavailable ? true : false
     end
 
     # Retrieve the raw WHOIS server output for a domain.
