@@ -32,7 +32,7 @@ Whois::Server.define('kz', 'whois.nic.kz')
 Whois::Server.define('la', 'whois2.afilias-grs.net')
 Whois::Server.define('ly', 'whois.lydomains.com')
 Whois::Server.define('mc', 'whois.ripe.net')
-Whois::Server.define('ms', 'whois.ms')
+Whois::Server.define('ms', 'whois.nic.ms')
 Whois::Server.define('mx', 'whois.nic.mx')
 Whois::Server.define('my', 'whois.mynic.net.my')
 Whois::Server.define('nu', 'whois.nic.nu')
@@ -61,30 +61,30 @@ Whois::Server.define('wf', 'whois.nic.wf')
 Whois::Server.define('ws', 'whois.tld.ws')
 Whois::Server.define('yt', 'whois.nic.yt')
 Whois::Server.define('us', 'whois.nic.us')
-Whois::Server.define('at',"whois.nic.at")
-Whois::Server.define('ca',"whois.cira.ca")
-Whois::Server.define('cc',"whois.nic.cc")
-Whois::Server.define('ch',"whois.nic.ch")
-Whois::Server.define('cn',"whois.cnnic.net.cn")
-Whois::Server.define('cz',"whois.nic.cz")
-Whois::Server.define('ee',"whois.eenet.ee")
-Whois::Server.define('gr',"https://grweb.ics.forth.gr/")
-Whois::Server.define('it',"whois.nic.it")
-Whois::Server.define('li',"whois.nic.li")
-Whois::Server.define('lt',"whois.domreg.lt")
-Whois::Server.define('lu',"whois.dns.lu")
-Whois::Server.define('lv',"whois.ripe.net")
-Whois::Server.define('ms',"whois.adamsnames.tc")
-Whois::Server.define('co.nz',"whois.domainz.net.nz")
-Whois::Server.define('nu',"whois.nic.nu")
-Whois::Server.define('pl',"whois.dns.pl")
-Whois::Server.define('ro',"whois.rotld.ro")
-Whois::Server.define('ru',"whois.ripn.net")
-Whois::Server.define('se',"whois.nic-se.se")
-Whois::Server.define('sk',"whois.ripe.net")
-Whois::Server.define('tc',"whois.adamsnames.tc")
-Whois::Server.define('vg',"whois.adamsnames.tc")
-Whois::Server.define('ws',"whois.worldsite.ws")
+Whois::Server.define('at', 'whois.nic.at')
+Whois::Server.define('ca', 'whois.cira.ca')
+Whois::Server.define('cc', 'whois.nic.cc')
+Whois::Server.define('ch', 'whois.nic.ch')
+Whois::Server.define('cn', 'whois.cnnic.net.cn')
+Whois::Server.define('cz', 'whois.nic.cz')
+Whois::Server.define('ee', 'whois.eenet.ee')
+Whois::Server.define('gr', 'https://grweb.ics.forth.gr/')
+Whois::Server.define('it', 'whois.nic.it')
+Whois::Server.define('li', 'whois.nic.li')
+Whois::Server.define('lt', 'whois.domreg.lt')
+Whois::Server.define('lu', 'whois.dns.lu')
+Whois::Server.define('lv', 'whois.ripe.net')
+Whois::Server.define('ms', 'whois.adamsnames.tc')
+Whois::Server.define('co.nz', 'whois.domainz.net.nz')
+Whois::Server.define('nu', 'whois.nic.nu')
+Whois::Server.define('pl', 'whois.dns.pl')
+Whois::Server.define('ro', 'whois.rotld.ro')
+Whois::Server.define('ru', 'whois.ripn.net')
+Whois::Server.define('se', 'whois.nic-se.se')
+Whois::Server.define('sk', 'whois.ripe.net')
+Whois::Server.define('tc', 'whois.adamsnames.tc')
+Whois::Server.define('vg', 'whois.adamsnames.tc')
+Whois::Server.define('ws', 'whois.worldsite.ws')
 
 #Whois::Server.define('es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
 #Whois::Server.define('com.es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
@@ -103,7 +103,6 @@ Whois::Server.define(
   :registered => [%q{%DOMAIN% </a> </th> <td class="disp"> <img src="../images/icon_disp_no.gif" alt="no" />}, 'im'],
   :free => [%q{%DOMAIN% </a> </th> <td class="disp"> <img src="../images/icon_disp_yes.gif" alt="si" />}, 'im']
 )
-
 
 # By leaving out the whois server, we force it to follow the internic redirection.
 Whois::Server.define(
@@ -177,7 +176,7 @@ Whois::Server.define(
 )
 Whois::Server.define(
   'eu',
-  'http://www.whois.eu/whois/GetDomainStatus.htm?domainName=%DOMAIN%',
+  'whois.eu',
   :free => /AVAILABLE/im,
   :registered => /REGISTERED/im,
   :pending => /APPLICATION PENDING/im,
@@ -193,7 +192,7 @@ Whois::Server.define(
 Whois::Server.define(
   'name',
   'whois.nic.name',
-  :registered => /Not available for registration./im,
+  :registered => /Not available for second level registration./im,
   :preserved => /Not available for second level registration./im,
   :free => /No match./im
 )
@@ -206,10 +205,10 @@ Whois::Server.define(
 Whois::Server.define(
   'nl',
   'whois.domain-registry.nl',
-  :registered => /ims active/im,
-  :free => /ims free/im,
-  :error => /imnvalid name/im,
-  :preserved => /ims excluded/im
+  :registered => /active/im,
+  :free => /free/im,
+  :error => /invalid domain/im,
+  :preserved => /excluded/im
 )
 Whois::Server.define(
   'org',
@@ -257,13 +256,21 @@ Whois::Server.define(
   :registered => /EXIST/im,
   :free => /AVAIL/im
 )
-Whois::Server.define('asia', 'whois.nic.asia',
+Whois::Server.define(
+  'asia', 
+  'whois.nic.asia',
   :registered => /Domain ID/im,
   :free => /NOT FOUND/im
 )
 Whois::Server.define(
- '.co.il',
+ 'co.il',
  'whois.isoc.org.il',
  :registered => /validity:/im,
  :free => /No data was found to match the request criteria./im
+)
+Whois::Server.define(
+ 'ac.uk',
+ 'whois.ja.net',
+ :registered => /Domain:/im,
+ :free => /No such domain/im
 )

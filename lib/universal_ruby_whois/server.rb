@@ -13,8 +13,8 @@ module Whois
 
     # The default regular expressions used when defining a new server if none are supplied.
     DEFAULT_WHOIS_REGULAR_EXPRESSIONS = {
-        :free => /(avail|free|no match|no entr|not taken|not registered|not found)/im,
-        :registered => /(registered|Domain ID|domain name\s*\:|is active|is not available|exists|\bregistrant\b|Created on)/im,
+        :free => /(avail|free|no match|no entr|not taken|Available|Status\:\sNot\sRegistered|not registered|not found)/im,
+        :registered => /(registered|Domain ID|domain name\s*\:|is active|Status\:\sActive|Not available|is not available|exists|\bregistrant\b|Created on)/im,
         :creation_date => /(Creation date|created on|created at|Commencement Date|Registration Date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+?\d[\w\-\:\ \/]*)[^\n\r]*[\n\r]/im,
         :expiration_date => /(expiration date|expires on|registered through|Renewal date)\s*[\:\.\]]*\s*([\w\-\:\ \/]+?\d[\w\-\:\ \/]*)[^\n\r]*[\n\r]/im,
         :error => /(error)/im,
@@ -243,4 +243,3 @@ module Whois
   end
 
 end
-
