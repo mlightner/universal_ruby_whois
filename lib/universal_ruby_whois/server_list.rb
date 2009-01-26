@@ -198,12 +198,12 @@ Whois::Server.define(
   :preserved => /Not available for second level registration./im,
   :free => /No match./im
 )
-Whois::Server.define(
-  'net',
-  'whois.verisign-grs.com',
-  :registered => /Domain Name:/im,
-  :free => /No match for/im
-)
+# Whois::Server.define(
+#   'net',
+#   'whois.verisign-grs.com',
+#   :registered => /Domain Name:/im,
+#   :free => /No match for/im
+# )
 Whois::Server.define(
   'nl',
   'whois.domain-registry.nl',
