@@ -125,6 +125,20 @@ module Whois
     def to_s
       domain.to_s rescue nil
     end
+    def to_hash
+      {
+        :status => self.status,
+        :creation_date => self.creation_date,
+        :expiration_date => self.expiration_date,
+        :output => self.whois_output
+      }
+    end
+    def to_json
+      self.to_hash.to_json
+    end
+    def to_xml
+      self.to_hash.to_xml
+    end
   end
 
 end
