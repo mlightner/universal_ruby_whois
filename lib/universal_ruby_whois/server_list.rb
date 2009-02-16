@@ -36,7 +36,6 @@ Whois::Server.define('mc', 'whois.ripe.net')
 Whois::Server.define('ms', 'whois.nic.ms')
 Whois::Server.define('mx', 'whois.nic.mx')
 Whois::Server.define('my', 'whois.mynic.net.my')
-Whois::Server.define('nu', 'whois.nic.nu')
 Whois::Server.define('pl', 'whois.dns.pl')
 Whois::Server.define('pm', 'whois.nic.pm')
 Whois::Server.define('pro', 'whois.registrypro.pro')
@@ -179,8 +178,8 @@ Whois::Server.define(
 Whois::Server.define(
   'eu',
   'whois.eu',
-  :free => /AVAILABLE/im,
-  :registered => /REGISTERED/im,
+  :free => /Nameservers\:/im.invert!,
+  :registered => /Nameservers\:/im,
   :pending => /APPLICATION PENDING/im,
   :error => /NOT ALLOWED/im
 )
@@ -275,4 +274,16 @@ Whois::Server.define(
  'whois.ja.net',
  :registered => /Domain:/im,
  :free => /No such domain/im
+)
+Whois::Server.define(
+  %w(gd tc vg ms),
+  'whois.adamsnames.tc',
+  :free => /is not registered/im,
+  :registered => /is registered/im
+)
+Whois::Server.define(
+  'nu', 
+  'whois.nic.nu',
+  :free => /NO MATCH.*/,
+  :registered => /Domain Name/
 )
