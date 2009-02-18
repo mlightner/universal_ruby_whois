@@ -247,9 +247,10 @@ Whois::Server.define(
 )
 Whois::Server.define(
   'mobi',
-  'whois.corenic.net',
-  :registered => /Domain ID:/im,
-  :free => /NOT FOUND/m
+#  'whois.corenic.net',
+  'whois.dotmobiregistry.net',
+  :registered => /is not registered/im.invert!,
+  :free => /is not registered/im
 )
 Whois::Server.define(
   'ca',
