@@ -118,10 +118,13 @@ Whois::Server.define(
   :free => /Status:\s*Active/im.invert!
 )
 
-Whois::Server.define(%w(asn.au com.au id.au net.au org.au), 'whois.aunic.net',
+Whois::Server.define(
+  %w(asn.au com.au id.au net.au org.au), 
+  'whois.ausregistry.net.au',
   :free => /No Data Found/im,
-  :registered => /No Data Found/im.invert!,
-  :error => /BLACKLISTED/m )
+  :registered => /Last Modified/im,
+  :error => /BLACKLISTED/m
+)
 
 Whois::Server.define(
  %w(hk com.hk net.hk edu.hk org.hk gov.hk idv.hk),
