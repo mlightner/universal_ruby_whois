@@ -85,6 +85,7 @@ Whois::Server.define('sk', 'whois.ripe.net')
 Whois::Server.define('tc', 'whois.adamsnames.tc')
 Whois::Server.define('vg', 'whois.adamsnames.tc')
 Whois::Server.define('ws', 'whois.worldsite.ws')
+Whois::Server.define('gd', 'whois.adamsnames.tc')
 
 #Whois::Server.define('es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
 #Whois::Server.define('com.es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
@@ -264,18 +265,23 @@ Whois::Server.define(
   :free => /NOT FOUND/im
 )
 Whois::Server.define(
- 'co.il',
- 'whois.isoc.org.il',
- :registered => /validity:/im,
- :free => /No data was found to match the request criteria./im
+  'co.il',
+  'whois.isoc.org.il',
+  :registered => /validity:/im,
+  :free => /No data was found to match the request criteria./im
 )
 Whois::Server.define(
- 'ac.uk',
- 'whois.ja.net',
- :registered => /Domain:/im,
- :free => /No such domain/im
+  'ac.uk',
+  'whois.ja.net',
+  :registered => /Domain:/im,
+  :free => /No such domain/im
 )
 Whois::Server.define(
+  %w(cx cm ht ki mu nf sb tl),
+  'whois.nic.cx',
+  :registered => //im,
+  :free => /(Not Registered|No Applications Pending)/im
+)Whois::Server.define(
   %w(gd tc vg ms),
   'whois.adamsnames.tc',
   :free => /is not registered/im,
