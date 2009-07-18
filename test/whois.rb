@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../lib/universal_ruby_whois'
 
 class WhoisTest < Test::Unit::TestCase
 
-  TEST_TLDS = %w(com org co.uk eu.com ru info jp eu tc nu co.nz)
+  TEST_TLDS = %w(com org co.uk eu.com ru info jp eu tc nu co.nz no)
   REGISTERED_DOMAIN = "google"
   AVAILABLE_DOMAIN = "asdfasdfasdfcvr3rwsdc2e"
 
@@ -53,6 +53,11 @@ class WhoisTest < Test::Unit::TestCase
   def test_mobi_domain
     domain = find_and_assert_domain("google.mobi")
     assert domain.expiration_date_known?
+  end
+  
+  def test_no_domain
+    domain = find_and_assert_domain("norge.no")
+    assert_equal Time.local(*ParseDate.parsedate("1999-11-15")), domain.creation_date
   end
 
   protected

@@ -1,5 +1,5 @@
 require 'rubygems'
-Gem::manage_gems
+# Gem::manage_gems is deprecated
 
 require 'rake/rdoctask'
 require 'rake/packagetask'
