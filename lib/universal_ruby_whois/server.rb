@@ -13,10 +13,10 @@ module Whois
 
     # The default regular expressions used when defining a new server if none are supplied.
     DEFAULT_WHOIS_REGULAR_EXPRESSIONS = {
-        :free => /(avail|free|no match|no entr|not taken|Available|Status\:\sNot\sRegistered|not registered|not found)/im,
-        :registered => /(registered|Domain ID|domain name\s*\:|is active|Status\:\sActive|Not available|is not available|exists|\bregistrant\b|Created on)/im,
-        :creation_date => /(Creation date|created on|created at|Commencement Date|Registration Date|domain_dateregistered)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
-        :expiration_date => /(expiration date|expires on|registered through|Renewal date|domain_datebilleduntil)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
+        :free => /(avail|free|no match|no entr|not taken|Available|Status\:\sNot\sRegistered|not registered|not found|No match for domain)/im,
+        :registered => /(registered|Domain ID|domain name\s*\:|is active|Status\:\sActive|Not available|is not available|exists|\bregistrant\b|Created on|created\:)/im,
+        :creation_date => /(Creation date|created on|created at|Commencement Date|Registration Date|domain_dateregistered|created\:)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
+        :expiration_date => /(expiration date|expires on|registered through|Renewal date|domain_datebilleduntil|expires\:)\s*[\:\.\]]*\s*([\w\-\:\ \/]+)[^\n\r]*[\n\r]/im,
         :error => /(error)/im,
         :server_unavailable => /(Sorry\. Server busy\.|too many requests|been blocked)/im
       }

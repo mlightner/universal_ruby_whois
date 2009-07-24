@@ -1,5 +1,5 @@
 PKG_NAME      = 'universal_ruby_whois'
-PKG_VERSION   = '1.2.6'
+PKG_VERSION   = '1.2.7'
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 RUBY_FORGE_PROJECT = 'universalwhois'
 RUBY_FORGE_USER    = 'mlightner'
