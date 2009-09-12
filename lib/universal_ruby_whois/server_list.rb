@@ -286,7 +286,8 @@ Whois::Server.define(
   'whois.nic.cx',
   :registered => //im,
   :free => /(Not Registered|No Applications Pending)/im
-)Whois::Server.define(
+)
+Whois::Server.define(
   %w(gd tc vg ms),
   'whois.adamsnames.tc',
   :free => /is not registered/im,
