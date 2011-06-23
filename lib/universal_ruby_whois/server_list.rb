@@ -75,7 +75,6 @@ Whois::Server.define('li', 'whois.nic.li')
 Whois::Server.define('lt', 'whois.domreg.lt')
 Whois::Server.define('lu', 'whois.dns.lu')
 Whois::Server.define('lv', 'whois.ripe.net')
-Whois::Server.define('ms', 'whois.adamsnames.tc')
 Whois::Server.define('co.nz', 'whois.domainz.net.nz')
 Whois::Server.define('nu', 'whois.nic.nu')
 Whois::Server.define('pl', 'whois.dns.pl')
@@ -83,13 +82,18 @@ Whois::Server.define('ro', 'whois.rotld.ro')
 Whois::Server.define('ru', 'whois.ripn.net')
 Whois::Server.define('se', 'whois.iis.se')
 Whois::Server.define('sk', 'whois.ripe.net')
-Whois::Server.define('tc', 'whois.adamsnames.tc')
-Whois::Server.define('vg', 'whois.adamsnames.tc')
 Whois::Server.define('ws', 'whois.worldsite.ws')
-Whois::Server.define('gd', 'whois.adamsnames.tc')
 
 #Whois::Server.define('es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
 #Whois::Server.define('com.es',"https://www.nic.es/esnic/servlet/BuscarDomSolAlta?dominio=%DOMAIN%")
+
+
+Whois::Server.define(
+  %w(gd tc vg ms),
+  'whois.adamsnames.tc',
+  :registered => /is registered/im,
+  :free => /is not registered/im
+)
 
 Whois::Server.define(
   %w(jp co.jp or.jp ne.jp ac.jp ad.jp ed.jp go.jp gr.jp lg.jp),
