@@ -84,4 +84,3 @@ queries.  In particular, the registrars for these domains:
 
 Contribution is encouraged!  Grab the source from: git://github.com/mlightner/universal_ruby_whois.git
 
-Hi Tomashe
